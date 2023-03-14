@@ -4,10 +4,10 @@ const NotFoundError = require('./exceptions/NotFoundError');
 class StorageService {
   constructor() {
     const storage = new Storage({
-      projectId: 'xharf-dev',
+      projectId: process.env.PROJECT_ID,
     });
 
-    this._bucket = storage.bucket("gs-app");
+    this._bucket = storage.bucket(process.env.BUCKET_NAME);
   }
 
   async writeFile(file) {
