@@ -12,7 +12,9 @@ class StorageService {
 
   async writeFile(file) {
     const filename = +new Date() + file.name;
-    await this._bucket.file(filename).save(file._data);
+    console.log("writeFile")
+    console.log(file)
+    await this._bucket.file(filename).save(file.data);
 
     return filename;
   }
@@ -33,6 +35,19 @@ class StorageService {
       const [files] = await this._bucket.getFiles();
       return files.map((file) => file.name);
     } catch (error) {
+      throw error;
+    }
+  }
+
+  async downloadFile(filename) {
+    try{
+      const [file] = await this._bucket.file(filename).download();
+      return file;
+    }
+    catch(error){
+      if (error.code === 404) {
+        throw new NotFoundError('File tidak ditemukan');
+      }
       throw error;
     }
   }

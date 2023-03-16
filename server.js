@@ -15,13 +15,15 @@ app.post('/', async (req, res) => {
   if (!req.files || !req.files.file) {
     return res.status(400).send({ message: "File is empty. Please upload a file!" });
   }
+
+  console.log(req.files.file)
   
   const file = req.files.file;
 
   const fileName = await storageService.writeFile(file);
   res.json({ 
      status: 'success',
-        message: 'Gambar berhasil diunggah',
+        message: 'File berhasil diunggah',
         data: {
           pictureUrl: `https://storage.googleapis.com/gs-app/${fileName}`,
         },
@@ -38,7 +40,7 @@ app.get('/', async (req, res) => {
 
   res.json({
     status: 'success',
-    message: 'Daftar gambar berhasil didapatkan',
+    message: 'Daftar file berhasil didapatkan',
     data: {
       fileNameUrl,
     },
@@ -62,9 +64,26 @@ app.delete('/', async (req, res) => {
   
   res.json({
     status: 'success',
-    message: 'Gambar berhasil dihapus',
+    message: 'File berhasil dihapus',
   });
 });
+
+app.get('/download/:filename', async (req, res) => {
+  const storageService = new StorageService();
+  const filename = req.params.filename;
+
+  if (!filename) {
+    return res.status(400).send({ message: "File name is empty. Please provide a file name!" });
+  }
+
+  try {
+    const file = await storageService.downloadFile(filename);
+    res.send(file);
+  } catch (error) {
+    return res.status(404).send({ message: "File not found!" });
+  }
+});
+
 
 
 app.listen(PORT, () => {
