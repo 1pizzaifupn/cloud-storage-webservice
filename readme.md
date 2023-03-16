@@ -46,6 +46,34 @@ Now i assume that you already have the service account key file. You can follow 
 7. Deploy the app to GCP App Engine by running `gcloud app deploy` from cloud shell in the console or from your local machine if you have installed the gcloud sdk
 8. Test the app by using the url `https://<your-app-id>.appspot.com/` (you can find the app id in the GCP console)
 
+## What features are available?
+
+1. Upload file
+
+   Notes: You only can upload one file at a time. The file will be uploaded to the bucket that you have set in the .env file. The file will be uploaded to the root directory of the bucket. The file will be uploaded with the name that you have set in the form and prefixed by unix epoch time.
+
+   the file uploaded must be in form data with the key `file` and the value is the file that you want to upload.
+
+   this feature is using POST method and the url is `/`
+
+2. Download file
+
+   Notes: You only can download one file at a time. The file will be downloaded from the bucket that you have set in the .env file.
+
+   this feature is using GET method and the url is `/download/{filename}`
+
+3. Delete file
+
+   Notes: You only can delete one file at a time. The file will be deleted from the bucket that you have set in the .env file.
+
+   this feature is using DELETE method and the url is `/delete/{filename}`
+
+4. List files
+
+   Notes: You can list all the files in the bucket that you have set in the .env file.
+
+   this feature is using GET method and the url is `/`
+
 ## Testing
 
 You can run the postman by push the button below

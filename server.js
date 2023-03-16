@@ -8,7 +8,6 @@ const StorageService = require('./StorageService');
 app.use(fileupload());
 app.use(express.json());
 
-
 app.post('/', async (req, res) => {
   const storageService = new StorageService();
 
@@ -47,17 +46,16 @@ app.get('/', async (req, res) => {
   });
 });
 
-app.delete('/', async (req, res) => {
+app.delete('/delete/:filename', async (req, res) => {
   const storageService = new StorageService();
-  console.log()
-  const { fileName } = req.body;
+  const filename = req.params.filename;
 
-  if (!fileName) {
+  if (!filename) {
     return res.status(400).send({ message: "File name is empty. Please provide a file name!" });
   }
 
   try {
-  await storageService.deleteFile(fileName);
+  await storageService.deleteFile(filename);
   } catch (error) {
     return res.status(404).send({ message: "File not found!" });
   }
